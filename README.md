@@ -33,3 +33,10 @@ real outcome, not a skip — use it to explicitly turn a flag off for a cohort.
 The rollout bucket is derived from a 32-bit hash of `salt + ':' + key` mapped to
 0–99. Because the hash space is finite, a 30% rollout will not land on exactly
 30% of keys for small samples; it converges as the cohort grows.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
